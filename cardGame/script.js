@@ -25,7 +25,7 @@ class Unit extends Card{
     if(target instanceof Unit){
       target.res -= this.power;
       if(target.res <= 0){
-        return `the enemy ${target.name} was defeated by ${this.name}`;
+        console.log(`the enemy ${target.name} was defeated by ${this.name}`);
       }
     
     }else{
@@ -47,12 +47,9 @@ class Effect extends Card{
   played(target){
     if(target instanceof Unit){ //sea asegura que el objetivo sea otra unidad
       target.effects.push(this.name)
-      if(this.text.includes('increase')){
-        target[this.stat] += this.magnitude;
-      }
-      if(this.text.includes('decreases')){
-        target[this.stat] -= this.magnitude;
-      }
+
+      target[this.stat] += this.magnitude;
+  
     }
     else{
       throw new Error("Target must be a unit!")
@@ -65,9 +62,18 @@ class Effect extends Card{
 const playerOne = new Unit('Ninja Cinturon Rojo',3,3,4);
 const playerTwo = new Unit('Ninja Cinturon Negro',4,5,4);
 
-const algoritmo = new Effect('Hard Algorithm',2,'increase the target s resistance resilience by 3',res,3);
+const algoritmo = new Effect('Hard Algorithm',2,'increase the target s resistance resilience by 3','res',3);
 
-const rechazo = new Effect('Rejection of promise not handled',1,'decrease the target s resilience by 2',res,2);
+const rechazo = new Effect('Rejection of promise not handled',1,'decrease the target s resilience by 2','res',-2);
 
-const pp = new Effect('Pair programming',3,'increase the target s power by 2',power,2);
+const pp = new Effect('Pair programming',3,'increase the target s power by 2','power',2);
 
+algoritmo.played(playerOne);
+
+rechazo.played(playerOne);
+
+pp.played(playerOne);
+
+playerOne.attack(playerTwo);
+
+console.table({playerOne,playerTwo});
